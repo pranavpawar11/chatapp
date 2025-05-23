@@ -1,0 +1,12 @@
+# Global ignores
+node_modules/
+.env
+.DS_Store
+
+# React app
+client/node_modules/
+client/build/
+
+# Server
+server/node_modules/
+server/firebase/serviceAccountKey.json
