@@ -4,7 +4,7 @@
 /node_modules
 /.pnp
 .pnp.js
-firebase/serviceAccountKey.json
+/firebase/serviceAccountKey.json
 
 # testing
 /coverage
