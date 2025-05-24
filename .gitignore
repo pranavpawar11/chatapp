@@ -9,4 +9,4 @@ client/build/
 
 # Server
 server/node_modules/
-server/firebase/serviceAccountKey.json
+/server/firebase/serviceAccountKey.json
