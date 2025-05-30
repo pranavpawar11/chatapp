@@ -67,7 +67,6 @@ const initializeDefaultRooms = async () => {
   }
 };
 
-// Ensure room exists helper function
 const ensureRoomExists = async (roomId) => {
   try {
     const roomDoc = await db.collection('rooms').doc(roomId).get();
@@ -94,7 +93,7 @@ const ensureRoomExists = async (roomId) => {
   }
 };
 
-// Call this when server starts
+
 initializeDefaultRooms();
 
 // Socket.io connection handling
@@ -142,7 +141,6 @@ io.on('connection', (socket) => {
         return;
       }
 
-      // Ensure the room exists
       const roomExists = await ensureRoomExists(roomId);
       if (!roomExists) {
         socket.emit('room_not_found', { roomId });
@@ -151,12 +149,10 @@ io.on('connection', (socket) => {
 
       const previousRoom = user.currentRoom;
       
-      // Leave previous room if exists
       if (previousRoom) {
         socket.leave(previousRoom);
         if (roomUsers.has(previousRoom)) {
           roomUsers.get(previousRoom).delete(socket.id);
-          // Emit updated user list to previous room
           const prevRoomUsers = Array.from(roomUsers.get(previousRoom) || [])
             .map(socketId => onlineUsers.get(socketId))
             .filter(user => user);
@@ -210,7 +206,6 @@ io.on('connection', (socket) => {
         return;
       }
 
-      // Validate that user is in the room they're trying to send to
       if (user.currentRoom !== messageData.room) {
         console.warn(`User ${user.name} tried to send message to room ${messageData.room} but is in ${user.currentRoom}`);
         socket.emit('message_failed', { error: 'Not in the specified room' });
@@ -236,7 +231,6 @@ io.on('connection', (socket) => {
         timestamp: timestamp
       };
 
-      // Save message to Firebase with better error handling
       try {
         await db.collection('messages').doc(messageId).set({
           ...message,
@@ -249,7 +243,6 @@ io.on('connection', (socket) => {
         return;
       }
 
-      // Emit message to ALL users in the room (including sender for confirmation)
       io.to(messageData.room).emit('new_message', message);
 
       console.log(`Message sent in room ${messageData.room} by ${user.name}: "${messageData.text}"`);
@@ -271,11 +264,9 @@ io.on('connection', (socket) => {
         return;
       }
 
-      // Generate a clean room ID
       const cleanName = roomName.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-');
       const roomId = `${cleanName}_${Date.now()}`;
       
-      // Save room to Firebase
       await db.collection('rooms').doc(roomId).set({
         id: roomId,
         name: roomName,
@@ -321,7 +312,6 @@ io.on('connection', (socket) => {
       if (user) {
         const currentRoom = user.currentRoom;
         
-        // Remove from room users
         if (currentRoom && roomUsers.has(currentRoom)) {
           roomUsers.get(currentRoom).delete(socket.id);
           const roomUsersList = Array.from(roomUsers.get(currentRoom) || [])
@@ -330,19 +320,16 @@ io.on('connection', (socket) => {
           io.to(currentRoom).emit('users_updated', roomUsersList);
         }
 
-        // Remove from Firebase
         try {
           await db.collection('onlineUsers').doc(user.id).delete();
         } catch (firebaseError) {
           console.error('Error removing user from Firebase:', firebaseError);
         }
         
-        // Remove from memory
         onlineUsers.delete(socket.id);
         
         console.log(`User ${user.name} disconnected`);
-        
-        // Send updated global user list
+
         const allUsers = Array.from(onlineUsers.values());
         io.emit('users_updated', allUsers);
       }
@@ -372,16 +359,14 @@ app.get('/api/rooms', async (req, res) => {
   }
 });
 
-// Fixed messages endpoint - this is crucial for loading previous messages
+
 app.get('/api/messages/:roomId', async (req, res) => {
   try {
     const { roomId } = req.params;
     console.log(`Loading messages for room: ${roomId}`);
     
-    // Ensure room exists
     await ensureRoomExists(roomId);
 
-    // Query messages without ordering first (to avoid index issues)
     const messagesSnapshot = await db.collection('messages')
       .where('room', '==', roomId)
       .limit(100)
@@ -393,7 +378,6 @@ app.get('/api/messages/:roomId', async (req, res) => {
       const data = doc.data();
       let timestamp;
       
-      // Handle different timestamp formats
       if (data.timestamp) {
         timestamp = data.timestamp;
       } else if (data.createdAt && data.createdAt.toDate) {
@@ -412,7 +396,6 @@ app.get('/api/messages/:roomId', async (req, res) => {
       };
     });
     
-    // Sort messages by timestamp (oldest first)
     messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
     
     console.log(`Returning ${messages.length} messages for room ${roomId}`);
@@ -421,7 +404,6 @@ app.get('/api/messages/:roomId', async (req, res) => {
   } catch (error) {
     console.error('Error fetching messages for room', req.params.roomId, ':', error);
     
-    // Return empty array instead of error to prevent client crashes
     res.json([]);
   }
 });
@@ -445,7 +427,6 @@ app.delete('/api/messages/:roomId', async (req, res) => {
     
     await batch.commit();
     
-    // Notify all users in the room that messages were cleared
     io.to(roomId).emit('messages_cleared', { roomId });
     
     res.json({ success: true, deleted: messagesSnapshot.docs.length });

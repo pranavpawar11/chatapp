@@ -8,7 +8,6 @@ const LoginSignup = ({ onLogin, isDarkMode, setIsDarkMode }) => {
     e.preventDefault();
     if (username.trim()) {
       setIsLoading(true);
-      // Simulate loading and create user with unique ID
       setTimeout(() => {
         const user = {
           id: `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,

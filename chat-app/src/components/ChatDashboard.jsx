@@ -26,7 +26,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
   const [isConnected, setIsConnected] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [loadingMessages, setLoadingMessages] = useState(false);
-  // NEW: Track if user has successfully joined the current room
   const [roomJoinStatus, setRoomJoinStatus] = useState(new Map());
 
   // Initialize socket connection
@@ -48,7 +47,7 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
 
     socketRef.current.on('disconnect', () => {
       setIsConnected(false);
-      setRoomJoinStatus(new Map()); // Clear room join status on disconnect
+      setRoomJoinStatus(new Map()); 
       console.log('Disconnected from server');
     });
 
@@ -57,7 +56,7 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
       setIsConnected(false);
     });
 
-    // Handle new messages
+    
     socketRef.current.on('new_message', (message) => {
       console.log('Received message:', message);
       setMessages(prevMessages => {
@@ -82,9 +81,8 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
       });
       setNewRoomName('');
       setShowRoomInput(false);
-      setIsLoading(false); // FIXED: Reset loading state here
+      setIsLoading(false); 
       
-      // FIXED: Use a timeout to ensure room is created on server before switching
       setTimeout(() => {
         changeRoom(data.roomId);
       }, 500);
@@ -106,9 +104,8 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
         }
         return prevRooms;
       });
-      setIsLoading(false); // FIXED: Reset loading state here
+      setIsLoading(false); 
       
-      // FIXED: Use timeout here too
       setTimeout(() => {
         changeRoom(roomData.id);
       }, 300);
@@ -123,7 +120,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
       setIsLoading(false);
     });
 
-    // FIXED: Handle successful room join confirmation
     socketRef.current.on('room_joined', (data) => {
       console.log('Successfully joined room:', data);
       if (data.success && data.roomId) {
@@ -166,30 +162,25 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
     };
   }, [currentUser]);
 
-  // FIXED: Better room change handling
   useEffect(() => {
     if (currentRoom && isConnected && socketRef.current) {
       console.log('Room changed to:', currentRoom);
       
-      // Clear messages immediately when switching rooms
       setMessages(prevMessages => prevMessages.filter(msg => msg.room !== currentRoom));
       setLoadingMessages(true);
       
-      // Reset room join status for this room
       setRoomJoinStatus(prev => {
         const newMap = new Map(prev);
         newMap.set(currentRoom, false);
         return newMap;
       });
       
-      // Join the room via socket
       console.log('Emitting join_room for:', currentRoom);
       socketRef.current.emit('join_room', { 
         roomId: currentRoom, 
         userId: currentUser.id 
       });
       
-      // Load messages after a delay to ensure room join is processed
       const loadMessagesTimeout = setTimeout(async () => {
         try {
           await loadMessages(currentRoom);
@@ -198,7 +189,7 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
         } finally {
           setLoadingMessages(false);
         }
-      }, 800); // FIXED: Increased delay to ensure room join is processed
+      }, 800); 
 
       return () => {
         clearTimeout(loadMessagesTimeout);
@@ -206,10 +197,9 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
     }
   }, [currentRoom, isConnected, currentUser.id]);
 
-  // Filter messages by current room when displaying
   const currentRoomMessages = messages.filter(message => message.room === currentRoom);
 
-  // Update current room when URL changes
+
   useEffect(() => {
     if (roomId && roomId !== currentRoom) {
       console.log('URL room changed to:', roomId);
@@ -217,7 +207,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
     }
   }, [roomId, currentRoom]);
 
-  // Auto-scroll to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -226,7 +215,7 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
     scrollToBottom();
   }, [currentRoomMessages]);
 
-  // Load messages with better error handling and logging
+
   const loadMessages = async (roomId) => {
     try {
       console.log('Loading messages for room:', roomId);
@@ -237,7 +226,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
         const messagesData = await response.json();
         console.log(`Messages loaded for room ${roomId}:`, messagesData.length);
         
-        // Replace messages for this room
         setMessages(prevMessages => {
           const otherRoomMessages = prevMessages.filter(msg => msg.room !== roomId);
           return [...otherRoomMessages, ...messagesData];
@@ -250,12 +238,10 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
     }
   };
 
-  // FIXED: Enhanced send message with better validation
   const sendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim() || !isConnected || isLoading) return;
 
-    // FIXED: Check if user has successfully joined the current room
     const hasJoinedRoom = roomJoinStatus.get(currentRoom);
     if (!hasJoinedRoom) {
       console.warn('Cannot send message: User has not joined room', currentRoom);
@@ -266,7 +252,7 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
     const messageText = newMessage.trim();
     console.log('Sending message to room:', currentRoom, 'Message:', messageText);
     
-    setNewMessage(''); // Clear input immediately for better UX
+    setNewMessage(''); 
     setIsLoading(true);
     
     try {
@@ -275,7 +261,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
         room: currentRoom
       });
       
-      // Set a timeout to reset loading state
       setTimeout(() => {
         setIsLoading(false);
       }, 3000);
@@ -287,7 +272,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
     }
   };
 
-  // FIXED: Enhanced change room function
   const changeRoom = (roomId) => {
     if (roomId !== currentRoom && !loadingMessages) {
       console.log('Changing room from', currentRoom, 'to', roomId);
@@ -297,7 +281,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
     }
   };
 
-  // FIXED: Create room with better state management
   const createRoom = () => {
     if (newRoomName.trim() && isConnected && !isLoading) {
       setIsLoading(true);
@@ -308,7 +291,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
         userId: currentUser.id
       });
       
-      // Set a timeout in case the creation fails silently
       setTimeout(() => {
         if (isLoading) {
           setIsLoading(false);
@@ -318,7 +300,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
     }
   };
 
-  // FIXED: Join room by ID with better state management
   const joinRoomById = () => {
     if (joinRoomId.trim() && isConnected && !isLoading) {
       setIsLoading(true);
@@ -345,7 +326,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
           method: 'DELETE'
         });
         if (response.ok) {
-          // Remove messages for current room only
           setMessages(prevMessages => prevMessages.filter(msg => msg.room !== currentRoom));
           console.log('Chat cleared for room:', currentRoom);
         }
@@ -377,7 +357,7 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
     return room ? room.name : currentRoom;
   };
 
-  // FIXED: Better connection and room status indicator
+  // room status indicator
   const getRoomStatus = () => {
     if (!isConnected) return { status: 'disconnected', color: 'red', text: 'Offline' };
     if (loadingMessages) return { status: 'loading', color: 'yellow', text: 'Loading...' };
@@ -389,7 +369,6 @@ const ChatDashboard = ({ currentUser, onLogout, isDarkMode, setIsDarkMode }) => 
 
   return (
     <div className={`h-screen flex ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      {/* Mobile Overlay */}
       {showMobileSidebar && (
         <div 
           className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
