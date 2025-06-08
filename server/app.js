@@ -9,21 +9,19 @@ const app = express();
 // Connect to database
 connectDB();
 
-// CORS configuration
 const corsOptions = {
-  origin: [
-    "http://localhost:3000",
-    "https://teal-lily-a2c655.netlify.app"
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+    origin: [
+        "http://localhost:3000",
+        "https://teal-lily-a2c655.netlify.app"
+    ],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 };
 
-app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // Preflight support
-
 // Middleware
+app.use(cors(corsOptions));
+
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
 
@@ -36,10 +34,10 @@ app.use('/api/upload', require('./routes/uploadRoutes'));
 
 // Health check
 app.get('/health', (req, res) => {
-  res.json({
-    status: 'OK',
-    timestamp: new Date().toISOString()
-  });
+    res.json({
+        status: 'OK',
+        timestamp: new Date().toISOString()
+    });
 });
 
 // Error handling
