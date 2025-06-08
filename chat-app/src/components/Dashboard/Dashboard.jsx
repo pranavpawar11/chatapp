@@ -69,7 +69,6 @@ const Dashboard = () => {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Enhanced top bar */}
         <div className="flex items-center justify-between p-3 sm:p-4 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-200/50 dark:border-gray-700/50 shadow-sm">
           <div className="flex items-center space-x-2 sm:space-x-4 flex-1 min-w-0">
             {/* Mobile sidebar toggle - positioned first */}
@@ -153,7 +152,6 @@ const Dashboard = () => {
           
           {/* Action buttons */}
           <div className="flex items-center space-x-1 sm:space-x-2 flex-shrink-0">
-            {/* Notifications toggle - Hidden on very small screens */}
             <button
               onClick={() => setNotificationsEnabled(!notificationsEnabled)}
               className="hidden xs:block p-2 sm:p-2.5 rounded-lg sm:rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-200 hover:scale-105"

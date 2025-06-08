@@ -331,7 +331,6 @@ const MessagesTab = ({ activeRoom, setActiveRoom, searchQuery }) => {
         </div>
       )}
 
-      {/* Empty State */}
       {!hasContent && !searchQuery && (
         <div className="flex flex-col items-center justify-center p-8 text-center">
           <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 rounded-full flex items-center justify-center mb-6">

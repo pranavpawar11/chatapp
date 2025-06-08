@@ -192,7 +192,6 @@ const Message = ({ message, isCurrentUser, currentUserId }) => {
             <div className="ml-3">{renderMessageStatus()}</div>
           </div>
 
-          {/* Enhanced message tail/pointer */}
           <div
             className={`absolute bottom-0 w-4 h-4 ${
               isCurrentUser
