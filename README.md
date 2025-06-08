@@ -364,7 +364,7 @@ REACT_APP_SOCKET_URL=http://localhost:5000
 ---
 
 ### ➕ Create Room  
-![Create Room](screenshots/CreateRoom.png)  
+![Create Room](screenshots/createRoom.png)  
 *Simple UI to create new chat rooms or group chats with custom names and member selection*
 
 ---
@@ -376,14 +376,14 @@ REACT_APP_SOCKET_URL=http://localhost:5000
 ---
 
 ### 🌞 Light Mode  
-![Light Mode](screenshots/Lightmode.png)  
+![Light Mode](screenshots/lightMode.png)  
 *Clean and minimal light theme offering excellent readability and visual comfort*
 
 ---
 
 ### 🎥 ChatApp Demo Video  
 📺 **Watch the full walkthrough of the ChatApp experience:**  
-👉 [Click here to watch the demo video](screenshots/Chat-Demo.mp4)
+👉 [Click here to watch the demo video](screenshots/ChatApp-Demo.mp4)
 
 ---
 
