@@ -19,7 +19,7 @@ export const SocketProvider = ({ children }) => {
   const socket = useRef(null);
   const [connected, setConnected] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState([]);
-  const [messages, setMessages] = useState({});  // Changed to object to store messages by roomId
+  const [messages, setMessages] = useState({});  
   const [typingUsers, setTypingUsers] = useState({});
 
   useEffect(() => {
@@ -130,17 +130,14 @@ export const SocketProvider = ({ children }) => {
 
     socket.current.on('roomCreated', (room) => {
       console.log('New room created:', room);
-      // This will be handled by RoomList component
     });
 
     socket.current.on('roomUpdated', (room) => {
       console.log('Room updated:', room);
-      // This will be handled by RoomList component
     });
 
     socket.current.on('roomDeleted', (roomId) => {
       console.log('Room deleted:', roomId);
-      // This will be handled by RoomList component
     });
 
     socket.current.on('room_created', (data) => {
