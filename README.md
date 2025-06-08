@@ -1,47 +1,50 @@
-# 💬 ChatApp - Real-Time Chat Application
+# 💬 ChatApp - Real-Time MERN Stack Chat Application
 
-A modern, feature-rich real-time messaging application built with React.js and Node.js, featuring multiple chat rooms, real-time messaging, and a beautiful responsive UI with dark mode support.
+A modern, feature-rich real-time messaging application built with the **MERN Stack** (MongoDB, Express.js, React.js, Node.js), featuring group chats, private messaging, media sharing, and a beautiful responsive UI with dark mode support - designed to provide a WhatsApp-like experience.
 
 ## ✨ Features
 
 ### 💬 Real-Time Messaging
-- Built using **Socket.io** and **Firebase Firestore**
-- Instant message updates with **timestamps**, **sender names**, and **smooth UX**
+- Built using **Socket.io** for instant communication
+- Real-time message updates with **timestamps**, **sender info**, and **message status indicators**
+- **Typing indicators** to show when users are composing messages
+- **Message status tracking** with single/double tick indicators (delivered/seen)
 
-### 🏠 Chat Room System
-- Create custom rooms or join existing ones using unique room IDs
-- Share room IDs to invite others to your chat room
-- Join or leave rooms with a clean session flow
+### 🏠 Dual Chat System
+- **Group Chat Rooms**: Create and join public/private group conversations
+- **Private Messaging**: Direct one-on-one conversations between users
+- Share room IDs to invite others to group chats
+- Seamless switching between group and private chats
 
-### 👥 Online Users Display
-- View a live list of **online users** in the current room
-- Automatically updates when users join or leave
+### 📱 Media & Communication
+- **Media Sharing**: Send images, videos, and files in chats
+- **Emoji Support**: Built-in emoji picker for expressive messaging
+- **Profile Customization**: Upload profile pictures and set bio/status
+- **Message Formatting**: Rich text support with timestamps
 
-### 🌓 Light & Dark Mode
-- Toggle between **light and dark themes** with a single click
-- Clean and accessible UI in both modes
+### 👥 User Management
+- **Online Status**: Real-time display of active users
+- **User Profiles**: View and edit user profiles with bio and avatar
+- **Authentication System**: Secure login and signup with JWT tokens
+- **Profile Settings**: Update personal information and preferences
 
-### 📱 Responsive Design
-- **Mobile-first design** optimized for all screen sizes
-- **Collapsible sidebar** and smooth layout on mobile devices
+### 🌓 Modern UI/UX
+- **Light & Dark Mode**: Toggle between themes with persistent preference
+- **Responsive Design**: Optimized for desktop, tablet, and mobile devices
+- **WhatsApp-like Interface**: Familiar chat experience with modern aesthetics
+- **Smooth Animations**: Fluid transitions and loading states
+- **Collapsible Sidebar**: Space-efficient navigation on smaller screens
 
-### 🧩 UI & UX Enhancements
-- **Clear Chat** button to reset chat history
-- **Loading indicators** and transitions for better user experience
-- Smooth animations and a modern, intuitive interface
+### 🔐 Security & Performance
+- **JWT Authentication**: Secure token-based user authentication
+- **File Upload Security**: Safe media handling with file type validation
+- **Error Handling**: Comprehensive error management and user feedback
+- **Connection Resilience**: Auto-reconnection for network interruptions
 
-### 🔐 User Input Handling
-- Name-based login for room entry
-- **Input validation** with character limits and required fields
-
-### 🔄 Connection Handling
-- **Auto-reconnection** support for temporary network drops
-
-### 💾 Message Persistence
-- All messages are **stored in Firebase Firestore** for consistency across sessions
-
-### 🏠 Default Rooms 
-- Pre-configured rooms like **General**, **Tech**, **Gaming**, and **Random** for quick access
+### 💾 Data Persistence
+- **MongoDB Integration**: Reliable message and user data storage
+- **Chat History**: Complete conversation history across sessions
+- **Media Storage**: Secure file upload and retrieval system
 
 ---
 
@@ -51,36 +54,84 @@ A modern, feature-rich real-time messaging application built with React.js and N
 - **React.js** (Functional Components & Hooks)
 - **React Router DOM** - Client-side routing
 - **Socket.io Client** - Real-time communication
-- **Tailwind CSS** - Styling and responsive design
+- **Tailwind CSS** - Modern styling and responsive design
+- **Context API** - State management for auth, socket, and theme
 
 ### Backend
-- **Node.js** - Server runtime
-- **Express.js** - Web framework
-- **Socket.io** - WebSocket implementation
-- **Firebase Firestore** - Database and real-time data
-- **Firebase Admin SDK** - Server-side Firebase operations
+- **Node.js** - Server runtime environment
+- **Express.js** - Web application framework
+- **Socket.io** - WebSocket implementation for real-time features
+- **MongoDB** - NoSQL database for data persistence
+- **Mongoose** - MongoDB object modeling
+- **JWT** - JSON Web Tokens for authentication
+- **Multer** - File upload middleware
+- **bcryptjs** - Password hashing
 
 ---
 
 ## 📁 Project Structure
 
 ```
-chat-app/
-├── 📂 chat-app/                    # React Frontend
-│   ├── 📂 node_modules/
+ChatApp/
+├── 📂 chat-app/                           # React Frontend
 │   ├── 📂 src/
 │   │   ├── 📂 components/
-│   │   │   ├── 📄 ChatDashboard.jsx    # Main chat interface
-│   │   │   └── 📄 LoginSignup.jsx      # User authentication
-│   │   ├── 📄 App.js                   # Main app component
-│   │   ├── 📄 firebase.js              # Firebase credentials
-│   │   ├── 📄 index.js                 # React entry point
-│   │   └── 📄 ... (other React files)
+│   │   │   ├── 📂 auth/
+│   │   │   │   ├── 📄 Login.jsx           # User login component
+│   │   │   │   └── 📄 Signup.jsx          # User registration component
+│   │   │   └── 📂 Dashboard/
+│   │   │       ├── 📄 ChatArea.jsx        # Main chat interface
+│   │   │       ├── 📄 CreateRoomModal.jsx # Room creation modal
+│   │   │       ├── 📄 Dashboard.jsx       # Main dashboard component
+│   │   │       ├── 📄 EmojiPicker.jsx     # Emoji selection component
+│   │   │       ├── 📄 Message.jsx         # Individual message component
+│   │   │       ├── 📄 ProfileSettings.jsx # User profile management
+│   │   │       ├── 📄 RoomItem.jsx        # Room list item component
+│   │   │       ├── 📄 RoomList.jsx        # Room listing component
+│   │   │       ├── 📄 Sidebar.jsx         # Navigation sidebar
+│   │   │       ├── 📄 UserItem.jsx        # User list item component
+│   │   │       └── 📄 UserList.jsx        # Online users component
+│   │   ├── 📂 Context/
+│   │   │   ├── 📄 AuthContext.js          # Authentication state management
+│   │   │   ├── 📄 SocketContext.js        # Socket connection management
+│   │   │   └── 📄 ThemeContext.js         # Theme state management
+│   │   ├── 📄 App.js                      # Main application component
+│   │   └── 📄 index.js                    # React entry point
 │   └── 📄 package.json
-├── 📂 server/                      # Node.js Backend
-│   ├── 📂 firebase/
-│   │   └── 📄 serviceAccountKey.json   # Firebase credentials (not included)
-│   ├── 📄 index.js                     # Server entry point
+├── 📂 server/                             # Node.js Backend
+│   ├── 📂 config/
+│   │   ├── 📄 db.js                       # MongoDB connection setup
+│   │   ├── 📄 multer.js                   # File upload configuration
+│   │   └── 📄 socket.js                   # Socket.io configuration
+│   ├── 📂 controllers/
+│   │   ├── 📄 authController.js           # Authentication logic
+│   │   ├── 📄 chatController.js           # Chat operations
+│   │   ├── 📄 messageController.js        # Message handling
+│   │   ├── 📄 roomController.js           # Room management
+│   │   ├── 📄 uploadController.js         # File upload handling
+│   │   └── 📄 userController.js           # User operations
+│   ├── 📂 middleware/
+│   │   ├── 📄 auth.js                     # JWT verification
+│   │   ├── 📄 authMiddleware.js           # Authentication middleware
+│   │   └── 📄 errorHandler.js             # Global error handling
+│   ├── 📂 models/
+│   │   ├── 📄 Message.js                  # Message schema
+│   │   ├── 📄 Room.js                     # Room schema
+│   │   └── 📄 User.js                     # User schema
+│   ├── 📂 routes/
+│   │   ├── 📄 authRoutes.js               # Authentication endpoints
+│   │   ├── 📄 chatRoutes.js               # Chat-related endpoints
+│   │   ├── 📄 messageRoutes.js            # Message endpoints
+│   │   ├── 📄 roomRoutes.js               # Room management endpoints
+│   │   ├── 📄 uploadRoutes.js             # File upload endpoints
+│   │   └── 📄 userRoutes.js               # User management endpoints
+│   ├── 📂 socket/
+│   │   └── 📄 socketHandler.js            # Socket event handling
+│   ├── 📂 uploads/                        # Media file storage
+│   │   ├── 📂 profiles/                   # Profile pictures
+│   │   └── 📂 chat-media/                 # Chat media files
+│   ├── 📄 app.js                          # Express app configuration
+│   ├── 📄 index.js                        # Server startup
 │   └── 📄 package.json
 └── 📄 README.md
 ```
@@ -90,25 +141,27 @@ chat-app/
 ## 🚀 Setup Instructions
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
-- Firebase project with Firestore enabled
+- **Node.js** (v16 or higher)
+- **MongoDB** (local installation or MongoDB Atlas)
+- **npm** or **yarn** package manager
 
 ### 1. Clone the Repository
 ```bash
 git clone https://github.com/pranavpawar11/ChatApp.git
-cd chatapp
+cd ChatApp
 ```
 
-### 2. Firebase Setup
-> **⚠️ Security Note:** Firebase credentials are not included in this repository for security reasons.
+### 2. Database Setup
+**Option A: Local MongoDB**
+```bash
+# Install MongoDB locally and start the service
+mongod
+```
 
-1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
-2. Enable Firestore Database
-3. Generate a service account key:
-   - Go to Project Settings → Service Accounts
-   - Generate new private key
-   - Save the JSON file as `server/firebase/serviceAccountKey.json`
+**Option B: MongoDB Atlas (Cloud)**
+1. Create account at [MongoDB Atlas](https://www.mongodb.com/atlas)
+2. Create a new cluster and get connection string
+3. Add your IP to whitelist
 
 ### 3. Backend Setup
 ```bash
@@ -116,11 +169,35 @@ cd server
 npm install
 
 # Create environment file
-echo "GOOGLE_APPLICATION_CREDENTIALS=./firebase/serviceAccountKey.json
-CLIENT_URL=http://localhost:3000
-PORT=5000" > .env
+touch .env
+```
 
-# Start the server
+**Add the following to `.env`:**
+```env
+# Database
+MONGODB_URI=mongodb://localhost:27017/chatapp
+# Or for MongoDB Atlas:
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/chatapp
+
+# JWT Secret
+JWT_SECRET=your_super_secret_jwt_key_here
+
+# Server Configuration
+PORT=5000
+NODE_ENV=development
+
+# Client URL (for CORS)
+CLIENT_URL=http://localhost:3000
+
+# File Upload
+MAX_FILE_SIZE=10485760
+UPLOAD_PATH=./uploads
+```
+
+**Start the backend server:**
+```bash
+npm run dev
+# or
 npm start
 ```
 
@@ -130,15 +207,24 @@ cd chat-app
 npm install
 
 # Create environment file (optional)
-echo "REACT_APP_SERVER_URL=http://localhost:5000" > .env
+touch .env
+```
 
-# Start the React app
+**Add the following to `.env` (optional):**
+```env
+REACT_APP_SERVER_URL=http://localhost:5000
+REACT_APP_SOCKET_URL=http://localhost:5000
+```
+
+**Start the React application:**
+```bash
 npm start
 ```
 
 ### 5. Access the Application
-- Frontend: http://localhost:3000
-- Backend: http://localhost:5000
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:5000
+- **Socket.io**: Connected automatically to backend
 
 ---
 
@@ -146,106 +232,170 @@ npm start
 
 ### Server (.env)
 ```env
-GOOGLE_APPLICATION_CREDENTIALS=./firebase/serviceAccountKey.json
+MONGODB_URI=mongodb://localhost:27017/chatapp
+JWT_SECRET=your_jwt_secret_key
+PORT=5000
+CLIENT_URL=http://localhost:3000
+NODE_ENV=development
+MAX_FILE_SIZE=10485760
+UPLOAD_PATH=./uploads
 ```
 
-### Client (.env) 
+### Client (.env) - Optional
 ```env
 REACT_APP_SERVER_URL=http://localhost:5000
+REACT_APP_SOCKET_URL=http://localhost:5000
 ```
----
-
-## 📸 Screenshots
-## 🔐 Login Screen
-![Login Screen](screenshots/Login.png)  
-*A clean, modern login interface with a dark mode toggle and mobile-friendly layout.*
 
 ---
 
-## 🏠 Create Room
-![Create Room](screenshots/createRoom.png)  
-*Users can create new chat rooms with unique IDs and custom names.*
+## 📱 Key Features Showcase
+
+### 🔐 Authentication System
+- **Secure Registration**: Email-based signup with password validation
+- **JWT Login**: Token-based authentication with persistent sessions
+- **Profile Management**: Update avatar, bio, and personal information
+
+### 💬 Advanced Messaging
+- **Real-time Delivery**: Instant message transmission using Socket.io
+- **Message Status**: Visual indicators for sent, delivered, and read messages
+- **Typing Indicators**: See when other users are composing messages
+- **Media Support**: Share images, videos, and files seamlessly
+
+### 🏠 Flexible Chat Options
+- **Group Rooms**: Create public or private group conversations
+- **Direct Messages**: Private one-on-one conversations
+- **Room Management**: Admin controls for group settings
+- **User Presence**: Real-time online/offline status
+
+### 🎨 Modern Interface
+- **Responsive Design**: Optimized for all device sizes
+- **Dark/Light Themes**: User preference with system detection
+- **WhatsApp-inspired UI**: Familiar and intuitive user experience
+- **Smooth Animations**: Polished interactions and transitions
 
 ---
 
-## 🏠 Join Room
-![Join Room](screenshots/joinRoom.png)  
-*Easily join existing rooms using their unique room ID.*
+## 🔐 API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `GET /api/auth/verify` - Verify JWT token
+
+### Users
+- `GET /api/users/profile` - Get user profile
+- `PUT /api/users/profile` - Update user profile
+- `POST /api/users/avatar` - Upload profile picture
+
+### Rooms
+- `GET /api/rooms` - Get user's rooms
+- `POST /api/rooms` - Create new room
+- `GET /api/rooms/:id` - Get room details
+- `PUT /api/rooms/:id` - Update room
+- `DELETE /api/rooms/:id` - Delete room
+
+### Messages
+- `GET /api/messages/:roomId` - Get room messages
+- `POST /api/messages` - Send new message
+- `PUT /api/messages/:id/read` - Mark message as read
+
+### File Upload
+- `POST /api/upload/chat` - Upload chat media
+- `POST /api/upload/profile` - Upload profile picture
 
 ---
 
-## 💬 Chat Interface – Light Mode
-![Chat Interface - Light Mode](screenshots/lightMode.png)  
-*Main chat interface in light mode showing messages, users, and typing indicator.*
+## 🎯 Technical Implementation Highlights
 
----
+### Frontend Architecture
+- **React Hooks**: Modern functional components with useState, useEffect, useContext
+- **Context API**: Global state management for authentication, socket, and theme
+- **Component Reusability**: Modular design with props and event handling
+- **Responsive Design**: Mobile-first approach with Tailwind CSS
 
-## 🌙 Chat Interface – Dark Mode
-![Chat Interface - Dark Mode](screenshots/realTime-messaging.png)  
-*Elegant dark mode chat interface with blue accent colors and message history.*
-
----
-
-## 👥 Online Users Panel
-![Online Users](screenshots/onlineUsers.png)  
-*Displays online users in the current room with real-time updates.*
-
----
-
-## 🎥 Demo Video
-👉 [Watch the full demo here](screenshots/onlineUsers.png)  
-
----
-
-## 🎯 Key Implementation Highlights
-
-### React Architecture
-- **Functional Components** with modern React Hooks
-- **Custom State Management** using useState and useEffect
-- **React Router DOM** for seamless navigation
-- **Component Reusability** with props and event handling
+### Backend Architecture
+- **RESTful API**: Clean endpoint structure following REST principles
+- **Middleware Pipeline**: Authentication, error handling, and file upload middleware
+- **Database Modeling**: Efficient MongoDB schemas with Mongoose
+- **Socket.io Integration**: Real-time event handling and room management
 
 ### Real-Time Features
-- **Socket.io Integration** for instant messaging
-- **Firebase Firestore** for message persistence
-- **Auto-Reconnection Logic** for robust connectivity
-- **Real-Time User Tracking** across all rooms
+- **Socket.io Events**: Custom events for messaging, typing, and user presence
+- **Room Management**: Dynamic room joining/leaving with user tracking
+- **Message Broadcasting**: Efficient message distribution to room participants
+- **Connection Handling**: Graceful disconnection and reconnection logic
 
-### User Experience
-- **Responsive Design** using Tailwind CSS utility classes
-- **Loading States** and error handling
-- **Mobile-First Approach** with collapsible navigation
-- **Smooth Animations** and transitions
+### Security Implementation
+- **JWT Authentication**: Secure token-based user sessions
+- **Password Hashing**: bcryptjs for secure password storage
+- **File Validation**: Multer configuration for safe file uploads
+- **CORS Configuration**: Proper cross-origin resource sharing setup
 
-## 🔐 Security Features
-- Firebase credentials are gitignored for security
-- Input validation and sanitization
-- CORS configuration for API security
-- Environment variables for sensitive data
+---
 
-## 📝 Assignment Compliance
+## 📸 Screenshots and Demo
 
-This project fully meets all the internship assignment requirements:
+### 🔐 Authentication – Sign Up & Login  
+![Sign Up Screen](screenshots/Signup.png)  
+*Modern, responsive sign-up screen with user-friendly design and validation*  
 
-### ✅ Core Features Implemented
-- [x] User Login/Join functionality
-- [x] Chat Room Interface with timestamps and sender info
-- [x] Send New Message capability
-- [x] Clear Chat and Exit Room features
+![Login Screen](screenshots/login.png)  
+*Sleek login interface with dark mode support and secure authentication*  
 
-### ✅ Bonus Features Implemented
-- [x] Real-time messaging with Socket.io and Firebase
-- [x] Multiple Chat Rooms with create/join functionality
-- [x] Online Users List
-- [x] Responsive Design for Mobile
-- [x] Dark Mode Toggle
+---
 
-### ✅ Technical Guidelines Followed
-- [x] React Functional Components & Hooks
-- [x] React Router DOM for routing (/, /room/:id)
-- [x] Real-time with Socket.io and Firebase
-- [x] State management with useState and useEffect
-- [x] Tailwind CSS for styling
+### 🏠 Homepage  
+![Homepage](screenshots/Homepage.png)  
+*Central hub showing recent chats, contacts, and quick navigation to personal or group conversations*
+
+---
+
+### 💬 1-on-1 Chat  
+![1-on-1 Chat](screenshots/Chat.png)  
+*Private chat window with real-time messaging, emoji picker, file sharing, and read receipts*
+
+---
+
+### 👥 Group Chat  
+![Group Chat](screenshots/GroupChat.png)  
+*Group chat interface supporting multiple users, media sharing, message reactions, and mentions*
+
+---
+
+### ➕ Create Room  
+![Create Room](screenshots/CreateRoom.png)  
+*Simple UI to create new chat rooms or group chats with custom names and member selection*
+
+---
+
+### 👤 Profile Settings  
+![Profile Settings](screenshots/Profile.png)  
+*User profile management page with avatar upload, name editing, and status customization*
+
+---
+
+### 🌞 Light Mode  
+![Light Mode](screenshots/Lightmode.png)  
+*Clean and minimal light theme offering excellent readability and visual comfort*
+
+---
+
+### 🎥 ChatApp Demo Video  
+📺 **Watch the full walkthrough of the ChatApp experience:**  
+👉 [Click here to watch the demo video](screenshots/Chat-Demo.mp4)
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
 
 ## 👨‍💻 Developer
 
