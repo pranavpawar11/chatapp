@@ -23,6 +23,8 @@ export const SocketProvider = ({ children }) => {
   const [typingUsers, setTypingUsers] = useState({});
 
   useEffect(() => {
+
+    // Only initialize socket if user is authenticated
     if (user) {
       initializeSocket();
     }
@@ -32,7 +34,7 @@ export const SocketProvider = ({ children }) => {
         socket.current.disconnect();
       }
     };
-  }, [user]);
+  }, [user]); // Only re-run effect if user reference changes
 
   const initializeSocket = () => {
     const token = localStorage.getItem('token');
@@ -185,6 +187,7 @@ export const SocketProvider = ({ children }) => {
     }
   };
 
+  // Requests current online users list
   const requestOnlineUsers = () => {
     if (socket.current && connected) {
       socket.current.emit('getOnlineUsers');
