@@ -203,10 +203,10 @@ const MessagesTab = ({ activeRoom, setActiveRoom, searchQuery }) => {
                     {lastMessage.content}
                   </p>
                 ) : (
-                  <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                  <div className="text-sm text-gray-500 dark:text-gray-400 italic">
                     {chat.isOnline ? (
                       <span className="text-green-500 flex items-center">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                        <span className="w-2 h-2 bg-green-500 rounded-full mr-1 inline-block"></span>
                         Online
                       </span>
                     ) : (
@@ -215,7 +215,7 @@ const MessagesTab = ({ activeRoom, setActiveRoom, searchQuery }) => {
                         Last seen {formatLastSeen(chat.otherUser?.lastSeen)}
                       </span>
                     )}
-                  </p>
+                  </div>
                 )}
               </div>
               
@@ -263,10 +263,10 @@ const MessagesTab = ({ activeRoom, setActiveRoom, searchQuery }) => {
             </h4>
             <MessageCirclePlus className="w-4 h-4 text-gray-400 group-hover:text-blue-500 transition-colors" />
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
+          <div className="text-sm text-gray-500 dark:text-gray-400">
             {user.isOnline ? (
               <span className="text-green-500 flex items-center">
-                <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
+                <span className="w-2 h-2 bg-green-500 rounded-full mr-1 inline-block"></span>
                 Online
               </span>
             ) : (
@@ -275,7 +275,7 @@ const MessagesTab = ({ activeRoom, setActiveRoom, searchQuery }) => {
                 Last seen {formatLastSeen(user.lastSeen)}
               </span>
             )}
-          </p>
+          </div>
         </div>
       </button>
     </li>
